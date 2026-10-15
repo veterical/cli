@@ -1,8 +1,11 @@
 /* Copyright 2025 Veterical LLC */
-const createRequest = require('@monorepool/agentfirst/request.js')
-const getApiUrl = require('./getApiUrl.js')
-const session = require('./session.js')
-const { binaryName, envKeyName } = require('./constants.js')
+import createRequest from '@monorepool/agentfirst/request.js'
+
+import __module1 from './constants.js'
+import getApiUrl from './getApiUrl.js'
+import session from './session.js'
+
+const { binaryName, envKeyName } = __module1
 
 // Dual-mode transport from @monorepool/agentfirst:
 //
@@ -20,4 +23,4 @@ const { binaryName, envKeyName } = require('./constants.js')
 // session > stored key > environment key. Errors carry `.status` and
 // `.body`, and end with the login hint (naming both `veterical login` and
 // VETERICAL_API_KEY) when the caller never authenticated.
-module.exports = createRequest({ getApiUrl, session, envKeyName, binaryName })
+export default createRequest({ getApiUrl, session, envKeyName, binaryName })

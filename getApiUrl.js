@@ -5,6 +5,6 @@
 // Deliberately not @veterical/client's getUrl: that module pulls in
 // @monorepool/env, which carries the internal product roster — it must never
 // end up inside the public npm bundle.
-module.exports = function getApiUrl() {
+export default function getApiUrl() {
   return process.env.VETERICAL_API_URL || 'https://api.veterical.com'
 }

@@ -21,7 +21,7 @@ Requires Node.js 18 or newer.
 ## Quick start
 
 ```bash
-veterical login                          # choose browser or API key login
+veterical login                          # choose browser, another device or API key login
 veterical clients list -n 10             # the owners on file
 veterical patients list --fields name,species
 veterical appointments list --startTime 2026-08-01T00:00:00.000Z
@@ -45,7 +45,7 @@ veterical signup --email vet@example.com --json
 
 ## Authentication
 
-Two ways in, both stored in `~/.veterical/`:
+Three ways in, all stored in `~/.veterical/`:
 
 - **Browser** — `veterical login --browser` opens
   [app.veterical.com](https://app.veterical.com) in your browser to log in
@@ -53,6 +53,13 @@ Two ways in, both stored in `~/.veterical/`:
   refreshed automatically; requests carry `Authorization: Token base64(<jwt>)`.
   A browser session is organization-wide, so it reaches every clinic of the
   organization — and has to name one with `--clinicId` on writes.
+- **Another device** — `veterical login --device` is for a terminal whose
+  browser you cannot use: a remote desktop without copy and paste, an SSH
+  session, a server. It prints a link, a QR code and a one-time code: open the
+  link on your phone or on any computer where you are signed in to Veterical,
+  check that the code matches and approve. The terminal then stores a session of
+  its own, as `--browser` does. The code works once and expires after ten
+  minutes.
 - **API key** — `veterical login --with-key` prompts for an API key secret
   with a masked input. An administrator of your organization creates the key
   in the Veterical dashboard, on the clinic page under **API keys**. The
@@ -114,8 +121,9 @@ veterical clients list --json --fields _id,name,email | jq '.[] | {id: ._id, nam
 
 ```bash
 veterical signup --email vet@example.com   # create an account and log in
-veterical login                            # interactive: browser or API key
+veterical login                            # interactive: browser, another device or API key
 veterical login --browser                  # log in through app.veterical.com
+veterical login --device                   # approve the login from a phone or another computer
 veterical login --with-key                 # prompt for an API key secret (masked)
 veterical logout                           # clear everything in ~/.veterical/
 ```

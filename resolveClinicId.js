@@ -6,7 +6,7 @@
 // organization-wide, so it must. On update, when the caller passed no
 // --clinicId, reuse the clinicId of the existing record (costs one extra
 // read, and therefore the matching :read scope).
-module.exports = async function resolveClinicId(options, body, getExisting) {
+export default async function resolveClinicId(options, body, getExisting) {
   let clinicId = options.clinicId || body.clinicId
 
   if (!clinicId) {

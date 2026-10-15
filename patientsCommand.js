@@ -1,15 +1,15 @@
 /* Copyright 2025 Veterical LLC */
-const commander = require('commander')
-const {
-  printJson,
-  withJson,
-  fail,
-} = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveClinicId = require('./resolveClinicId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import __module1 from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveClinicId from './resolveClinicId.js'
+
+const { dim, bold, cyan } = __module1
 
 // A patient is the animal. It belongs to a client — the human owner — so
 // creates normally carry the owner's clientId.
@@ -140,7 +140,10 @@ function patientsCommand() {
       .option('--dateOfBirth <dateOfBirth>', 'date of birth, e.g. 2021-04-18')
       .option('--microchip <microchip>', 'microchip number')
       .option('--note <note>', 'free-text note')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -181,7 +184,10 @@ function patientsCommand() {
       .option('--dateOfBirth <dateOfBirth>', 'date of birth, e.g. 2021-04-18')
       .option('--microchip <microchip>', 'microchip number')
       .option('--note <note>', 'free-text note')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (patientId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -239,4 +245,4 @@ function patientsCommand() {
   return command
 }
 
-module.exports = patientsCommand
+export default patientsCommand

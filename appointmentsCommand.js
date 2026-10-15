@@ -1,17 +1,23 @@
 /* Copyright 2025 Veterical LLC */
-const commander = require('commander')
-const {
-  printJson,
-  withJson,
-  fail,
-} = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveClinicId = require('./resolveClinicId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
 
-const STATUSES = ['SCHEDULED', 'CLIENT_ARRIVED', 'NO_SHOW', 'CANCELED']
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import __module1 from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveClinicId from './resolveClinicId.js'
+
+const { dim, bold, cyan } = __module1
+
+const STATUSES = [
+  'REQUESTED',
+  'SCHEDULED',
+  'CLIENT_ARRIVED',
+  'NO_SHOW',
+  'CANCELED',
+]
 
 function appointmentsCommand() {
   const command = new commander.Command('appointments')
@@ -162,7 +168,10 @@ function appointmentsCommand() {
       .option('--status <status>', `one of ${STATUSES.join(', ')}`)
       .option('--title <title>', 'appointment title')
       .option('--note <note>', 'free-text note')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -202,28 +211,28 @@ function appointmentsCommand() {
       .option('--status <status>', `one of ${STATUSES.join(', ')}`)
       .option('--title <title>', 'appointment title')
       .option('--note <note>', 'free-text note')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (appointmentId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
       const clinicId = await resolveClinicId(options, body, () =>
         api.get(`/api/appointments/${appointmentId}`),
       )
-      const appointment = await api.put(
-        `/api/appointments/${appointmentId}`,
-        {
-          ...body,
-          _id: appointmentId,
-          ...(clinicId && { clinicId }),
-          ...(options.startTime && { startTime: options.startTime }),
-          ...(options.endTime && { endTime: options.endTime }),
-          ...(options.clientId && { clientId: options.clientId }),
-          ...(options.patientId && { patientId: options.patientId }),
-          ...(options.status && { status: options.status }),
-          ...(options.title && { title: options.title }),
-          ...(options.note && { note: options.note }),
-        },
-      )
+      const appointment = await api.put(`/api/appointments/${appointmentId}`, {
+        ...body,
+        _id: appointmentId,
+        ...(clinicId && { clinicId }),
+        ...(options.startTime && { startTime: options.startTime }),
+        ...(options.endTime && { endTime: options.endTime }),
+        ...(options.clientId && { clientId: options.clientId }),
+        ...(options.patientId && { patientId: options.patientId }),
+        ...(options.status && { status: options.status }),
+        ...(options.title && { title: options.title }),
+        ...(options.note && { note: options.note }),
+      })
       if (options.json) {
         printJson({ ok: true, id: appointment._id })
         return
@@ -263,4 +272,4 @@ function appointmentsCommand() {
   return command
 }
 
-module.exports = appointmentsCommand
+export default appointmentsCommand

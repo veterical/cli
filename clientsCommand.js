@@ -1,15 +1,15 @@
 /* Copyright 2025 Veterical LLC */
-const commander = require('commander')
-const {
-  printJson,
-  withJson,
-  fail,
-} = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveClinicId = require('./resolveClinicId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import __module1 from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveClinicId from './resolveClinicId.js'
+
+const { dim, bold, cyan } = __module1
 
 // In veterical a client is the human who owns the animal; the animal itself
 // is a patient. Every patient belongs to a client.
@@ -125,7 +125,10 @@ function clientsCommand() {
       .option('--email <email>', 'client email')
       .option('--phone <phone>', 'client phone number')
       .option('--language <language>', 'two-letter language code, e.g. en')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -158,7 +161,10 @@ function clientsCommand() {
       .option('--phone <phone>', 'client phone number')
       .option('--language <language>', 'two-letter language code, e.g. en')
       .option('--clinicId <clinicId>', 'clinic the client belongs to')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (clientId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -212,4 +218,4 @@ function clientsCommand() {
   return command
 }
 
-module.exports = clientsCommand
+export default clientsCommand

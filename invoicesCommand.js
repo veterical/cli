@@ -1,15 +1,15 @@
 /* Copyright 2025 Veterical LLC */
-const commander = require('commander')
-const {
-  printJson,
-  withJson,
-  fail,
-} = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveClinicId = require('./resolveClinicId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import __module1 from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveClinicId from './resolveClinicId.js'
+
+const { dim, bold, cyan } = __module1
 
 const STATUSES = [
   'DRAFT',
@@ -153,7 +153,10 @@ function invoicesCommand() {
       .option('--total <total>', 'invoice total in the clinic currency')
       .option('--invoiceTime <invoiceTime>', 'ISO-8601 invoice time')
       .option('--note <note>', 'free-text note')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -189,7 +192,10 @@ function invoicesCommand() {
       .option('--total <total>', 'invoice total in the clinic currency')
       .option('--invoiceTime <invoiceTime>', 'ISO-8601 invoice time')
       .option('--note <note>', 'free-text note')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (invoiceId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -244,4 +250,4 @@ function invoicesCommand() {
   return command
 }
 
-module.exports = invoicesCommand
+export default invoicesCommand

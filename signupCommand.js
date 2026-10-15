@@ -1,8 +1,11 @@
 /* Copyright 2025 Veterical LLC */
-const signupCommand = require('@monorepool/agentfirst/signupCommand.js')
-const getApiUrl = require('./getApiUrl.js')
-const session = require('./session.js')
-const { binaryName, appUrl } = require('./constants.js')
+import signupCommand from '@monorepool/agentfirst/signupCommand.js'
+
+import __module1 from './constants.js'
+import getApiUrl from './getApiUrl.js'
+import session from './session.js'
+
+const { binaryName, appUrl } = __module1
 
 // The step that used to need a person. `login` assumes the account already
 // exists; an agent pointed at veterical.com for the first time has nothing
@@ -17,5 +20,4 @@ const { binaryName, appUrl } = require('./constants.js')
 // writes — so every other command works immediately afterwards. The signup
 // also seeds the account's first clinic, which is what the resource
 // commands below need a clinicId for.
-module.exports = () =>
-  signupCommand({ binaryName, getApiUrl, appUrl, session })
+export default () => signupCommand({ binaryName, getApiUrl, appUrl, session })

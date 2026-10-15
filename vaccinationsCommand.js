@@ -1,15 +1,15 @@
 /* Copyright 2025 Veterical LLC */
-const commander = require('commander')
-const {
-  printJson,
-  withJson,
-  fail,
-} = require('@monorepool/agentfirst/output.js')
-const buildQuery = require('./buildQuery.js')
-const parseBody = require('./parseBody.js')
-const api = require('./request.js')
-const resolveClinicId = require('./resolveClinicId.js')
-const { dim, bold, cyan } = require('./formatOutput.js')
+
+import { fail, printJson, withJson } from '@monorepool/agentfirst/output.js'
+import commander from 'commander'
+
+import buildQuery from './buildQuery.js'
+import __module1 from './formatOutput.js'
+import parseBody from './parseBody.js'
+import api from './request.js'
+import resolveClinicId from './resolveClinicId.js'
+
+const { dim, bold, cyan } = __module1
 
 // Vaccination records drive the clinic's recall reminders: writing one with a
 // `reminders` array schedules the recall jobs, and deleting one cancels them.
@@ -144,7 +144,10 @@ function vaccinationsCommand() {
         'date the vaccine was administered',
       )
       .option('--nextDueDate <nextDueDate>', 'date the recall is due')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async options => {
     try {
       const body = options.body ? parseBody(options.body) : {}
@@ -185,28 +188,28 @@ function vaccinationsCommand() {
         'date the vaccine was administered',
       )
       .option('--nextDueDate <nextDueDate>', 'date the recall is due')
-      .option('--body <json>', 'extra JSON fields merged into the request body'),
+      .option(
+        '--body <json>',
+        'extra JSON fields merged into the request body',
+      ),
   ).action(async (vaccinationId, options) => {
     try {
       const body = options.body ? parseBody(options.body) : {}
       const clinicId = await resolveClinicId(options, body, () =>
         api.get(`/api/vaccinations/${vaccinationId}`),
       )
-      const vaccination = await api.put(
-        `/api/vaccinations/${vaccinationId}`,
-        {
-          ...body,
-          _id: vaccinationId,
-          ...(clinicId && { clinicId }),
-          ...(options.patientId && { patientId: options.patientId }),
-          ...(options.clientId && { clientId: options.clientId }),
-          ...(options.vaccine && { vaccine: options.vaccine }),
-          ...(options.administeredDate && {
-            administeredDate: options.administeredDate,
-          }),
-          ...(options.nextDueDate && { nextDueDate: options.nextDueDate }),
-        },
-      )
+      const vaccination = await api.put(`/api/vaccinations/${vaccinationId}`, {
+        ...body,
+        _id: vaccinationId,
+        ...(clinicId && { clinicId }),
+        ...(options.patientId && { patientId: options.patientId }),
+        ...(options.clientId && { clientId: options.clientId }),
+        ...(options.vaccine && { vaccine: options.vaccine }),
+        ...(options.administeredDate && {
+          administeredDate: options.administeredDate,
+        }),
+        ...(options.nextDueDate && { nextDueDate: options.nextDueDate }),
+      })
       if (options.json) {
         printJson({ ok: true, id: vaccination._id })
         return
@@ -246,4 +249,4 @@ function vaccinationsCommand() {
   return command
 }
 
-module.exports = vaccinationsCommand
+export default vaccinationsCommand
